@@ -50,15 +50,13 @@ function minimumSteps(m,n,d){
 }
 
 //Driving the code by taking user inputs
-
-
-/*var m = prompt("Enter the value of Jug1(m) : ");
+var m = prompt("Enter the value of Jug1(m) : ");
 var d = prompt("Enter the value of D : ");
-var n = prompt("Enter the value of Jug2(n) : ");*/
+var n = prompt("Enter the value of Jug2(n) : ");
 
 //User Input cancel - _ -
 
-var m = 28 , n = 20 , d = 14
+// var m = 28 , n = 20 , d = 14
 
 let result = minimumSteps(m,n,d);
 console.log("Minimum  numbers steps required are : " + result);
