@@ -1,1 +1,1 @@
-<h2>Two-Jug-Water-Puzzle-Solver</h2>
+<h2>Two-Jug-Water Puzzle Solver A.I</h2>
