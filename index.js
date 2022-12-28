@@ -1,62 +1,66 @@
-//Implementation of an AI to solve Two Jug Water Puzzle
+// Implementation of an AI to solve to jug water puzzle
+class State {
+  constructor(jug1, jug2) {
+    this.jug1 = jug1;
+    this.jug2 = jug2;
+  }
 
-function waterPuzz(a, b) {
+  toString() {
+    return `${this.jug1} ${this.jug2}`;
+  }
+}
+
+// Calculates the GCD using the Euclidean algorithm
+function gcd(a, b) {
   if (b == 0)
     return a;
-  return waterPuzz(b, a % b);
+  return gcd(b, a % b);
 }
 
-function pour(fromJug, toJug, d) {
-  var from = fromJug;
-  var to = 0;
-  var step = 1;
-  while (from != d && to != d) {
-    var temp = Math.min(from, toJug - to);
-    to += temp;
-    from -= temp;
-    step++;
-
-    if (from == d || to == d)
-      break;
-
-    if (from == 0) {
-      from == fromJug;
-      step++;
-    }
-    if (to == toJug) {
-      to = 0;
-      step++;
-    }
-  }
-  return step;
-}
-
-//Calculating Minimum Steps
+// Calculates the minimum number of steps
 function minimumSteps(m, n, d) {
-  if (m > n) {
-    var t = m;
-    m = n;
-    n = t;
+  // Check if it is possible to measure out 'd' units of water 
+  if (d > Math.max(m, n) || (d % gcd(m, n) != 0))
+    return -1;
+
+  const queue = [new State(0, 0)];
+  const visited = new Set();
+  let steps = 0;
+  while (queue.length > 0) {
+    steps++;
+    const size = queue.length;
+   
+    for (let i = 0; i < size; i++) {
+      const state = queue.shift();
+      if (state.jug1 == d || state.jug2 == d)
+        return steps;
+      if (visited.has(state.toString())) {
+        continue;
+      }
+   
+      visited.add(state.toString());
+     
+      queue.push(new State(m, state.jug2));
+      queue.push(new State(state.jug1, n));
+      queue.push(new State(0, state.jug2));
+      queue.push(new State(state.jug1, 0));
+      queue.push(new State(state.jug1 - Math.min(state.jug1, n - state.jug2), state.jug2 + Math.min(state.jug1, n - state.jug2)));
+      queue.push(new State(state.jug1 + Math.min(state.jug2, m - state.jug1), state.jug2 - Math.min(state.jug2, m - state.jug1)));
+    }
   }
 
-  if (d > n)
-    return -1;
-
-  if ((d % waterPuzz(n, m) != 0))
-    return -1;
-
-  return Math.min(pour(n, m, d),
-    pour(m, n, d));
+ 
+  return -1;
 }
 
-//Driving the code by taking user inputs
-var m = prompt("Enter the value of Jug1(m) : ");
-var d = prompt("Enter the value of D : "); 
-var n = prompt("Enter the value of Jug2(n) : ");
+//User Input
+const m = parseInt(prompt('Enter the value of Jug1(m) : '));
+const d = parseInt(prompt('Enter the value of D : ')); 
+const n = parseInt(prompt('Enter the value of Jug2(n) : '));
 
-//User Input cancel - _ -
+// Calculate the minimum number of steps
+const result = minimumSteps(m, n, d);
 
-// var m = 28 , n = 20 , d = 14
 
-let result = minimumSteps(m, n, d);
-console.log("Minimum  numbers steps required are : " + result);
+console.log(`Minimum  numbers steps required are : ${result}`);
+
